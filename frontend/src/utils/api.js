@@ -101,6 +101,12 @@ export function checkReceived(phone) {
   return Promise.resolve(r ? { received: true, amount: r.amount, label: r.denominationLabel, isSpecialGift: !!r.isSpecialGift } : { received: false });
 }
 
+/** Base path của app (vd. '' hoặc '/lixi') để URL QR đúng khi deploy GitHub Pages */
+function getBasePath() {
+  const b = typeof import.meta !== 'undefined' && import.meta.env?.BASE_URL ? import.meta.env.BASE_URL : '/';
+  return b.endsWith('/') ? b.slice(0, -1) : b;
+}
+
 export async function getQr() {
   const { getBaseUrlForQr } = await import('./qrBaseUrl.js');
   const base = await getBaseUrlForQr();
@@ -110,7 +116,9 @@ export async function getQr() {
     const r = await request(url);
     return r.data;
   }
-  const receiveUrl = `${baseClean || window.location.origin}/nhan-lixi`;
+  const origin = baseClean || (typeof window !== 'undefined' ? window.location.origin : '');
+  const basePath = getBasePath();
+  const receiveUrl = `${origin}${basePath}/nhan-lixi`;
   const QRCode = (await import('qrcode')).default;
   const qrDataUrl = await QRCode.toDataURL(receiveUrl, { width: 400, margin: 2 });
   return { qrDataUrl, receiveUrl };
