@@ -29,6 +29,11 @@ export default function Countdown({ startTime, endTime, onEnd }) {
   const mins = Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000));
   const secs = Math.floor((diff % (60 * 1000)) / 1000);
 
+  if (diff <= 0) {
+    if (onEnd) onEnd();
+    return null;
+  }
+
   return (
     <div className="countdown">
       <p className="countdown-label">
