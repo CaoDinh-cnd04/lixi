@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, Link } from 'react-router-dom';
 import ConfigPage from './ConfigPage';
 import DashboardPage from './DashboardPage';
 import QRAdminPage from './QRAdminPage';
@@ -164,9 +164,9 @@ export default function Admin() {
   return (
     <div className="admin-wrap">
       <nav className="admin-nav">
-        <a href="/admin/dashboard">Dashboard</a>
-        <a href="/admin/config">Cấu hình</a>
-        <a href="/admin/qr">Mã QR</a>
+        <Link to="/admin/dashboard">Dashboard</Link>
+        <Link to="/admin/config">Cấu hình</Link>
+        <Link to="/admin/qr">Mã QR</Link>
         <button type="button" className="btn-logout" onClick={handleLogout}>
           Đăng xuất
         </button>

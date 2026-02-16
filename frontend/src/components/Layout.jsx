@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import './Layout.css';
 
@@ -10,13 +10,13 @@ export default function Layout() {
     <div className="layout">
       <header className="layout-header">
         <div className="layout-inner">
-          <a href="/nhan-lixi" className="logo">
+          <Link to="/nhan-lixi" className="logo">
             <span className="logo-icon">🧧</span>
             <span>Lì Xì Online</span>
-          </a>
+          </Link>
           <div className="header-actions">
             <nav className="header-nav">
-              <a href="/admin">Admin</a>
+              <Link to="/admin">Admin</Link>
             </nav>
             <button
               type="button"

@@ -5,6 +5,7 @@ import { getClientIp } from '../utils/clientIp';
 import Envelope from '../components/Envelope';
 import MoneyImage from '../components/MoneyImage';
 import Countdown from '../components/Countdown';
+import TetBlossoms from '../components/TetBlossoms';
 import playLixiSound from '../utils/sound';
 import { getBlessingForAmount, isHighAmount } from '../utils/blessings';
 import { celebrateTop, celebrateSpecialGift } from '../utils/celebration';
@@ -287,6 +288,7 @@ export default function NhanLixi() {
 
   return (
     <div className="nhan-lixi">
+      <TetBlossoms />
       <motion.div
         className="nhan-lixi-inner"
         initial={{ opacity: 0, y: 10 }}

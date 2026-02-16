@@ -1,0 +1,126 @@
+/* Câu đối (trái + phải) + Đồng tiền tài - trang nhận lì xì */
+
+.tet-couplet {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 64px;
+  max-width: 18vw;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tet-couplet__inner {
+  background: linear-gradient(180deg, #c41e3a 0%, #a01830 100%);
+  border: 2px solid #8b1530;
+  border-radius: 8px;
+  padding: 14px 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15);
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 220px;
+  max-height: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.tet-couplet__flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.tet-couplet__word {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffd54f;
+  text-shadow: 0 0 1px #2d1810, 0 1px 2px rgba(0,0,0,0.3);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-12px);
+  animation: tet-word-drop 0.5s ease-out forwards;
+}
+
+.tet-couplet--right .tet-couplet__word {
+  animation-name: tet-word-drop-right;
+}
+
+@keyframes tet-word-drop {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tet-word-drop-right {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tet-couplet--left {
+  left: 8px;
+}
+
+.tet-couplet--right {
+  right: 8px;
+}
+
+[data-theme='dark'] .tet-couplet__inner {
+  background: linear-gradient(180deg, #b71c34 0%, #8b1530 100%);
+  border-color: #6b1025;
+}
+
+[data-theme='dark'] .tet-couplet__word {
+  color: #ffeb3b;
+}
+
+/* Đồng tiền tài */
+.tet-coin {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.9;
+}
+
+.tet-coin__svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25)) drop-shadow(0 0 1px rgba(184,134,11,0.3));
+}
+
+.tet-coin--1 { left: 12%;  top: 15%; width: 28px; height: 28px; }
+.tet-coin--2 { left: 8%;  top: 55%; width: 22px; height: 22px; transform: rotate(-15deg); }
+.tet-coin--3 { left: 15%; bottom: 20%; width: 24px; height: 24px; transform: rotate(10deg); }
+.tet-coin--4 { right: 12%; top: 18%; width: 26px; height: 26px; transform: rotate(8deg); }
+.tet-coin--5 { right: 8%;  top: 52%; width: 24px; height: 24px; transform: rotate(-10deg); }
+.tet-coin--6 { right: 14%; bottom: 22%; width: 28px; height: 28px; transform: rotate(-5deg); }
+
+@media (max-width: 600px) {
+  .tet-couplet {
+    width: 52px;
+    max-width: 16vw;
+  }
+  .tet-couplet__inner {
+    min-height: 180px;
+    max-height: 260px;
+    padding: 10px 6px;
+  }
+  .tet-couplet__word {
+    font-size: 0.72rem;
+  }
+  .tet-coin--1 { width: 20px; height: 20px; left: 4%; top: 12%; }
+  .tet-coin--2 { width: 16px; height: 16px; left: 2%; top: 50%; }
+  .tet-coin--3 { width: 18px; height: 18px; left: 6%; bottom: 18%; }
+  .tet-coin--4 { width: 18px; height: 18px; right: 4%; top: 14%; }
+  .tet-coin--5 { width: 16px; height: 16px; right: 2%; top: 50%; }
+  .tet-coin--6 { width: 20px; height: 20px; right: 6%; bottom: 20%; }
+}
