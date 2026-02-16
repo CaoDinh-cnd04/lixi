@@ -1,0 +1,173 @@
+.config-page {
+  padding: 0.5rem 0;
+}
+
+.admin-page-title {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  color: var(--primary);
+}
+
+.config-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px var(--shadow);
+}
+
+.config-section {
+  margin-bottom: 1.5rem;
+}
+
+.config-section h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.config-hint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.form-row {
+  margin-bottom: 1rem;
+}
+
+.form-row.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.config-form .form-group label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.config-form .form-group input[type="number"],
+.config-form .form-group input[type="text"],
+.config-form .form-group input[type="datetime-local"] {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.total-percent {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.total-percent.ok {
+  background: rgba(46, 125, 50, 0.15);
+  color: var(--success);
+}
+
+.total-percent.err {
+  background: rgba(198, 40, 40, 0.15);
+  color: var(--error);
+}
+
+.estimated-budget {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.estimated-budget strong {
+  color: var(--gold);
+}
+
+.denom-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.denom-row input[type="number"]:first-of-type {
+  width: 110px;
+}
+
+.denom-row .label-inp {
+  width: 70px;
+}
+
+.denom-row .pct-inp {
+  width: 80px;
+}
+
+.denom-row .qty-inp {
+  width: 80px;
+}
+
+.denom-unit {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.btn-remove {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--error);
+  background: transparent;
+  color: var(--error);
+  border-radius: 8px;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.btn-remove:hover {
+  background: rgba(198, 40, 40, 0.1);
+}
+
+.btn-secondary {
+  background: var(--border);
+  color: var(--text);
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+.btn-secondary:hover {
+  background: var(--gold-soft);
+}
+
+.message-box.success {
+  background: rgba(46, 125, 50, 0.12);
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+@media (max-width: 600px) {
+  .form-row.two {
+    grid-template-columns: 1fr;
+  }
+}

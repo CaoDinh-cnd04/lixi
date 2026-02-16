@@ -1,0 +1,107 @@
+.money-image {
+  text-align: center;
+  margin: 0 auto 0.5rem;
+}
+
+.money-image__img {
+  max-width: 100%;
+  width: 160px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  display: block;
+  margin: 0 auto;
+}
+
+/* Animation rung rung cho tờ tiền */
+.money-image--shake .money-image__img,
+.money-image--shake .money-image__bill {
+  animation: money-shake 0.6s ease-in-out 3;
+}
+
+@keyframes money-shake {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  15% { transform: rotate(-3deg) scale(1.02); }
+  30% { transform: rotate(3deg) scale(1.02); }
+  45% { transform: rotate(-2deg) scale(1.01); }
+  60% { transform: rotate(2deg) scale(1.01); }
+  75% { transform: rotate(-1deg) scale(1); }
+}
+
+.money-image__caption {
+  margin-top: 0.5rem;
+}
+
+.money-image__amount {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.money-image__label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Fallback: tờ tiền giả khi chưa có ảnh */
+.money-image--fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.money-image__bill {
+  width: 160px;
+  min-height: 72px;
+  aspect-ratio: 2.2 / 1;
+  background: linear-gradient(145deg, #e8d5b5 0%, #d4c4a0 50%, #c9b896 100%);
+  border: 2px solid #b8a078;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0.5rem;
+}
+
+.money-image__bill-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #5c4a2a;
+  letter-spacing: 0.02em;
+}
+
+.money-image__bill-label {
+  font-size: 0.75rem;
+  color: #6b5a3d;
+  font-weight: 600;
+  margin-top: 0.15rem;
+}
+
+.money-image__bill-decoration {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.money-image--fallback .money-image__amount {
+  font-size: 1.5rem;
+}
+
+@media (min-width: 480px) {
+  .money-image__img {
+    width: 200px;
+  }
+  .money-image__bill {
+    width: 200px;
+    min-height: 90px;
+  }
+  .money-image__bill-value {
+    font-size: 1.75rem;
+  }
+}

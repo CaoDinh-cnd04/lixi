@@ -1,0 +1,144 @@
+.dashboard-page {
+  padding: 0.5rem 0;
+}
+
+.admin-notice {
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.admin-notice strong {
+  color: var(--text);
+}
+
+.message-box.success {
+  background: rgba(46, 125, 50, 0.12);
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  text-align: center;
+  box-shadow: 0 2px 12px var(--shadow);
+}
+
+.stat-card.highlight {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(212, 168, 75, 0.08) 100%);
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+}
+
+.stat-card.highlight .stat-value {
+  color: var(--gold);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.chart-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 2px 12px var(--shadow);
+}
+
+.chart-box h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.chart-inner {
+  height: 220px;
+}
+
+.chart-doughnut {
+  height: 260px;
+}
+
+.table-section {
+  margin-bottom: 1.5rem;
+}
+
+.table-section h3 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table-wrap th,
+.table-wrap td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.table-wrap th {
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg);
+}
+
+.table-wrap tr:last-child td {
+  border-bottom: none;
+}
+
+.list-table table {
+  font-size: 0.85rem;
+}
+
+.list-table td,
+.list-table th {
+  padding: 0.6rem 0.75rem;
+}
+
+@media (max-width: 700px) {
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+  .chart-inner { height: 200px; }
+  .chart-doughnut { height: 240px; }
+}
