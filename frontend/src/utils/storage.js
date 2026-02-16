@@ -72,6 +72,14 @@ export function addRecipient(recipient) {
   return list;
 }
 
+/** Xóa một người nhận theo SĐT khỏi danh sách. Sau khi xóa, người đó có thể quét và nhận lì xì lại. */
+export function removeRecipientByPhone(phone) {
+  const phoneStr = String(phone || '').replace(/\s/g, '');
+  const list = getRecipients().filter((r) => String(r.phone || '').replace(/\s/g, '') !== phoneStr);
+  writeJson(RECIPIENTS_KEY, list);
+  return list;
+}
+
 /**
  * Random chọn mệnh giá theo tỉ lệ %.
  * Chỉ chọn trong các mệnh giá còn số lượng tờ (đã phát < quantity).

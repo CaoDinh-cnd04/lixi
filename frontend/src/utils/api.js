@@ -9,6 +9,7 @@ import {
   saveConfig,
   getRecipients,
   addRecipient,
+  removeRecipientByPhone,
   pickRandomDenomination,
   getStatsFromRecipients
 } from './storage';
@@ -177,4 +178,14 @@ export function getStatsList() {
   }
   const list = getRecipients().slice().reverse().slice(0, 500).map((r) => ({ name: r.name, age: r.age, phone: r.phone, amount: r.amount, denominationLabel: r.denominationLabel, receivedAt: r.receivedAt }));
   return Promise.resolve(list);
+}
+
+/** Xóa người nhận khỏi danh sách. Sau khi xóa, người đó có thể quét QR và nhận lì xì lại. */
+export function removeRecipient(idOrPhone) {
+  if (hasBackend()) {
+    const key = getAdminKey();
+    return requestAdmin('/stats/recipient/' + encodeURIComponent(idOrPhone), key, { method: 'DELETE' }).then((r) => r.message);
+  }
+  removeRecipientByPhone(idOrPhone);
+  return Promise.resolve('Đã xóa khỏi danh sách. Người này có thể quét lại.');
 }

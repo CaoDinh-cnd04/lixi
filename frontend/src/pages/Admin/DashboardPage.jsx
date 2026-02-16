@@ -11,7 +11,7 @@ import {
   ArcElement
 } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import { getStats, getStatsList, hasBackend } from '../../utils/api';
+import { getStats, getStatsList, removeRecipient, hasBackend } from '../../utils/api';
 import './DashboardPage.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
@@ -21,6 +21,7 @@ export default function DashboardPage() {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [deletingId, setDeletingId] = useState(null);
 
   const load = () => {
     setLoading(true);
@@ -39,6 +40,17 @@ export default function DashboardPage() {
     const t = setInterval(load, 30000);
     return () => clearInterval(t);
   }, []);
+
+  const handleRemove = (r) => {
+    const id = r._id || r.phone;
+    const label = r.name && r.phone ? `${r.name} (${r.phone})` : r.phone || id;
+    if (!window.confirm(`Xóa "${label}" khỏi danh sách? Người này sẽ có thể quét QR và nhận lì xì lại.`)) return;
+    setDeletingId(id);
+    removeRecipient(id)
+      .then(() => load())
+      .catch((e) => setError(e.message))
+      .finally(() => setDeletingId(null));
+  };
 
   if (loading && !data) {
     return (
@@ -180,6 +192,7 @@ export default function DashboardPage() {
 
       <div className="table-section">
         <h3>Danh sách người nhận (mới nhất)</h3>
+        <p className="list-hint">Xóa người nhận → người đó có thể quét QR và nhận lì xì lại.</p>
         <div className="table-wrap list-table">
           <table>
             <thead>
@@ -189,21 +202,33 @@ export default function DashboardPage() {
                 <th>Tuổi</th>
                 <th>Mệnh giá</th>
                 <th>Thời gian</th>
+                <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
               {list.slice(0, 50).map((r, i) => (
-                <tr key={i}>
+                <tr key={r._id || i}>
                   <td>{r.name}</td>
                   <td>{r.phone || '-'}</td>
                   <td>{r.age}</td>
                   <td>{r.denominationLabel}</td>
                   <td>{r.receivedAt ? new Date(r.receivedAt).toLocaleString('vi-VN') : '-'}</td>
+                  <td>
+                    <button
+                      type="button"
+                      className="btn-remove"
+                      onClick={() => handleRemove(r)}
+                      disabled={deletingId === (r._id || r.phone)}
+                      title="Xóa khỏi danh sách để người này có thể quét lại"
+                    >
+                      {deletingId === (r._id || r.phone) ? '...' : 'Xóa'}
+                    </button>
+                  </td>
                 </tr>
               ))}
               {list.length === 0 && (
                 <tr>
-                  <td colSpan={5}>Chưa có ai nhận</td>
+                  <td colSpan={6}>Chưa có ai nhận</td>
                 </tr>
               )}
             </tbody>

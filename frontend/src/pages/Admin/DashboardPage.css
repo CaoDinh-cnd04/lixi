@@ -92,8 +92,35 @@
 
 .table-section h3 {
   font-size: 1rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.35rem;
   color: var(--text);
+}
+
+.list-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.btn-remove {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  border: 1px solid var(--error);
+  color: var(--error);
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-remove:hover:not(:disabled) {
+  background: var(--error);
+  color: #fff;
+}
+
+.btn-remove:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .table-wrap {

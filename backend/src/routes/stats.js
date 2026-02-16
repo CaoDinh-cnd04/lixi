@@ -55,4 +55,16 @@ router.get('/list', authAdmin, async (req, res) => {
   }
 });
 
+/** Xóa một người nhận khỏi danh sách. Sau khi xóa, người đó (SĐT) có thể quét và nhận lì xì lại. */
+router.delete('/recipient/:id', authAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const doc = await Recipient.findByIdAndDelete(id);
+    if (!doc) return res.status(404).json({ success: false, message: 'Không tìm thấy người nhận' });
+    res.json({ success: true, message: 'Đã xóa khỏi danh sách. Người này có thể quét lại để nhận lì xì.' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 module.exports = router;
