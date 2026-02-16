@@ -19,6 +19,20 @@
   border: 1px solid var(--success);
 }
 
+.message-box.warning {
+  background: rgba(212, 168, 75, 0.15);
+  color: var(--text);
+  border: 1px solid var(--gold);
+  text-align: left;
+}
+
+.message-box.warning code {
+  background: var(--surface);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
 .stats-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));

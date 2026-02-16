@@ -1,9 +1,25 @@
+const STORAGE_BACKEND_URL = 'lixi_backend_url';
+
+/** Đọc URL backend cấu hình tại runtime (vd. Frontend GitHub Pages + Backend máy tính qua ngrok) */
+function getStoredBackendUrl() {
+  if (typeof window === 'undefined') return '';
+  try {
+    const u = localStorage.getItem(STORAGE_BACKEND_URL);
+    return typeof u === 'string' ? u.trim() : '';
+  } catch {
+    return '';
+  }
+}
+
 /**
- * Gọi API backend khi có VITE_API_URL. Dùng cho mọi request lên server.
- * Chỉ dùng host:5000 khi đang ở mạng nội bộ (192.168.x, 10.x) để điện thoại quét QR gọi đúng máy.
- * Trên GitHub Pages / domain công khai: chỉ dùng VITE_API_URL (build time); không set thì không gọi backend.
+ * Trả về base URL API: ưu tiên URL cấu hình trên trang (localStorage), sau đó VITE_API_URL (build), cuối là LAN :5000.
  */
 function getApiBase() {
+  const stored = getStoredBackendUrl();
+  if (stored) {
+    const clean = stored.replace(/\/api\/?$/, '').replace(/\/$/, '');
+    if (/^https?:\/\//i.test(clean)) return `${clean}/api`;
+  }
   const raw = import.meta.env.VITE_API_URL;
   const url = typeof raw === 'string' ? raw.trim() : '';
   const base = url ? `${url.replace(/\/$/, '')}/api` : '';
@@ -14,12 +30,29 @@ function getApiBase() {
   if (isLan && !base) return `${window.location.protocol}//${host}:5000/api`;
   return base;
 }
-const BASE = getApiBase();
 
-export const hasBackend = () => !!BASE;
+function getBase() {
+  return getApiBase();
+}
+
+export const hasBackend = () => !!getBase();
+
+/** Lưu URL backend (vd. https://xxx.ngrok.io) để Frontend GitHub Pages gọi Backend chạy trên máy bạn */
+export function setBackendUrl(url) {
+  if (typeof window === 'undefined') return;
+  const u = (url || '').trim().replace(/\/api\/?$/, '').replace(/\/$/, '');
+  try {
+    if (u) localStorage.setItem(STORAGE_BACKEND_URL, u);
+    else localStorage.removeItem(STORAGE_BACKEND_URL);
+  } catch (_) {}
+}
+
+export function getBackendUrl() {
+  return getStoredBackendUrl();
+}
 
 export async function request(path, options = {}) {
-  const url = `${BASE}${path}`;
+  const url = `${getBase()}${path}`;
   const headers = { ...options.headers };
   if (options.body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
   const res = await fetch(url, { ...options, headers });

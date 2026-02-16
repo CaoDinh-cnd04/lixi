@@ -1,9 +1,9 @@
 /**
  * Layer dữ liệu: dùng Backend khi có VITE_API_URL, không thì dùng localStorage.
  */
-import { hasBackend, request, requestAdmin } from './apiClient';
+import { hasBackend, request, requestAdmin, setBackendUrl, getBackendUrl } from './apiClient';
 
-export { hasBackend };
+export { hasBackend, setBackendUrl, getBackendUrl };
 import {
   getConfig as getConfigStorage,
   saveConfig,
@@ -127,7 +127,9 @@ export async function getQr() {
   const publicOrigin = getPublicOrigin();
   const origin = publicOrigin || baseClean || (typeof window !== 'undefined' ? window.location.origin : '');
   const basePath = getBasePath();
-  const receiveUrl = `${origin}${basePath}/nhan-lixi`;
+  let receiveUrl = `${origin}${basePath}/nhan-lixi`;
+  const backendUrl = getBackendUrl();
+  if (backendUrl) receiveUrl += (receiveUrl.includes('?') ? '&' : '?') + 'api=' + encodeURIComponent(backendUrl);
   const QRCode = (await import('qrcode')).default;
   const qrDataUrl = await QRCode.toDataURL(receiveUrl, { width: 400, margin: 2 });
   return { qrDataUrl, receiveUrl };

@@ -119,8 +119,10 @@ export default function DashboardPage() {
           <strong>✅ Đang dùng Backend:</strong> Danh sách đồng bộ từ server. Mọi thiết bị quét QR và nhận lì xì đều hiện tại đây.
         </div>
       ) : (
-        <div className="message-box info admin-notice">
-          <strong>📌 Chỉ dùng localStorage:</strong> Danh sách chỉ hiện người nhận trên <strong>cùng thiết bị</strong>. Để thấy danh sách từ mọi thiết bị, hãy bật Backend (xem README).
+        <div className="message-box warning admin-notice admin-notice--no-backend">
+          <strong>⚠️ Tại sao người khác quét QR trên điện thoại khác không lưu vào đây?</strong>
+          <p style={{ margin: '0.5rem 0 0' }}>Trang đang chạy <strong>chỉ frontend</strong> (không có server). Dữ liệu lưu trong <strong>trình duyệt từng máy</strong>. Điện thoại A quét → lưu trên máy A. Bạn mở Admin trên máy tính → chỉ thấy dữ liệu máy tính (trống).</p>
+          <p style={{ margin: '0.5rem 0 0', fontWeight: 600 }}>Để người quét QR trên mọi máy đều lưu vào danh sách: deploy Backend (Node + MongoDB) rồi build frontend có <code>VITE_API_URL</code> trỏ tới Backend. Xem README mục "Deploy Frontend + Backend".</p>
         </div>
       )}
       {data?.isLocked && (

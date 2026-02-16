@@ -1,5 +1,7 @@
 # 🧧 Lì Xì Online - Web lì xì sự kiện
 
+**Trang nhận lì xì (demo):** https://caodinh-cnd04.github.io/lixi/nhan-lixi · **Admin:** https://caodinh-cnd04.github.io/lixi/admin
+
 Có **hai chế độ**:
 - **Chỉ Frontend (localStorage):** Không cần server, dữ liệu lưu trên từng thiết bị. Admin chỉ thấy danh sách người nhận trên cùng thiết bị.
 - **Frontend + Backend (MongoDB):** Dữ liệu lưu trên server → **Admin thấy danh sách từ mọi thiết bị** (điện thoại quét QR, máy tính mở Admin đều đồng bộ).
@@ -64,7 +66,22 @@ npm run dev
 
 **Bước 3 – Đăng nhập Admin**
 
-Vào **http://localhost:5173/admin** → nhập **mã admin** trùng với `ADMIN_SECRET` trong backend/.env → vào Dashboard/Cấu hình/Mã QR. Mọi thiết bị quét QR và nhận lì xì sẽ được lưu trên server và hiện trong danh sách Admin.
+Vào **http://localhost:5173/admin** (hoặc **http://IP_MÁY:5173/admin** nếu dùng điện thoại cùng WiFi) → nhập **mã admin** trùng với `ADMIN_SECRET` trong backend/.env → vào Dashboard/Cấu hình/Mã QR.
+
+**🖥️ Frontend GitHub Pages + Backend chạy trên máy tính (ngrok):**
+- Deploy frontend lên GitHub Pages như bình thường. Trên máy tính: chạy backend (`cd backend && npm run dev`) và dùng **ngrok** để tạo URL công khai trỏ tới cổng 5000: `ngrok http 5000` → được URL dạng `https://abc123.ngrok.io`.
+- Trong **backend/.env** đặt `FRONTEND_URL=https://caodinh-cnd04.github.io` (đúng domain GitHub Pages của bạn) để CORS cho phép.
+- Mở **https://caodinh-cnd04.github.io/lixi/admin** → ở mục "Backend chạy trên máy bạn?" nhập URL ngrok (vd. `https://abc123.ngrok.io`) → **Lưu URL backend**. Trang tải lại, đăng nhập Admin bằng mã trùng `ADMIN_SECRET`.
+- Vào **Mã QR** → mã QR mới sẽ chứa link dạng `.../nhan-lixi?api=https://abc123.ngrok.io`. Người quét QR mở link đó → trình duyệt tự lưu backend URL và gửi dữ liệu về máy bạn → Admin thấy trong danh sách.
+- Lưu ý: URL ngrok (bản miễn phí) đổi mỗi lần chạy lại; mỗi lần chạy ngrok mới cần vào Admin nhập lại URL và tạo lại QR.
+
+**⚠️ Backend chạy trên máy tính (cùng WiFi, không ngrok):**
+
+- **Không mở link GitHub Pages.** Trang đó không kết nối tới backend trên máy bạn.
+- Trên máy tính: mở **http://localhost:5173** (hoặc biết IP nội bộ máy, vd. 192.168.1.5 thì mở **http://192.168.1.5:5173**).
+- Trong **backend/.env** đặt `FRONTEND_URL=http://192.168.1.5:5173` (thay 192.168.1.5 bằng IP thật của máy bạn; xem IP: Windows `ipconfig`, Mac/Linux `ifconfig`).
+- Điện thoại **cùng WiFi** với máy tính: mở **http://192.168.1.5:5173/nhan-lixi** (cùng IP), quét QR tạo từ Admin (QR sẽ trỏ đúng link này) → nhận lì xì → dữ liệu lưu vào backend trên máy bạn, Admin thấy trong danh sách.
+- Nếu MongoDB báo lỗi: cài MongoDB local hoặc dùng MongoDB Atlas (xem HUONG-DAN-MONGODB-ATLAS.md), và set đúng `MONGODB_URI` trong backend/.env.
 
 ### Cách dùng
 

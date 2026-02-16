@@ -89,3 +89,43 @@
 .btn-logout:hover {
   background: rgba(198, 40, 40, 0.1);
 }
+
+.admin-backend-url {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  text-align: left;
+}
+
+.admin-backend-url-title {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: var(--text);
+}
+
+.admin-backend-url-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.admin-backend-url-desc code {
+  background: var(--bg);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.admin-backend-url input {
+  margin-bottom: 0.5rem;
+}
+
+.admin-backend-url .btn {
+  width: 100%;
+}
+
+.admin-backend-url-ok {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--success);
+}

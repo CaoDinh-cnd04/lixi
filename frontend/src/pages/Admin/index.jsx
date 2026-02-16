@@ -11,7 +11,7 @@ import {
   clearSession,
   isLoggedIn
 } from '../../utils/adminAuth';
-import { hasBackend, verifyAdmin, setAdminKeyForApi } from '../../utils/api';
+import { hasBackend, verifyAdmin, setAdminKeyForApi, setBackendUrl, getBackendUrl } from '../../utils/api';
 import './Admin.css';
 
 export default function Admin() {
@@ -22,6 +22,8 @@ export default function Admin() {
   const [confirmCode, setConfirmCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [backendUrlInput, setBackendUrlInput] = useState(getBackendUrl() || '');
+  const [backendUrlSaved, setBackendUrlSaved] = useState(false);
   const navigate = useNavigate();
 
   const useBackend = hasBackend();
@@ -94,6 +96,23 @@ export default function Admin() {
     navigate('/admin/dashboard');
   };
 
+  const handleSaveBackendUrl = (e) => {
+    e.preventDefault();
+    const url = backendUrlInput.trim().replace(/\/+$/, '');
+    if (!url) {
+      setError('Nhập URL backend (vd. https://xxx.ngrok.io)');
+      return;
+    }
+    if (!/^https?:\/\/.+/i.test(url)) {
+      setError('URL phải bắt đầu bằng http:// hoặc https://');
+      return;
+    }
+    setError('');
+    setBackendUrl(url);
+    setBackendUrlSaved(true);
+    setTimeout(() => window.location.reload(), 400);
+  };
+
   const handleLogout = () => {
     clearSession();
     setAdminKeyForApi('');
@@ -156,6 +175,23 @@ export default function Admin() {
               {loading ? 'Đang kiểm tra...' : isCreate ? 'Tạo mã và vào quản lý' : 'Đăng nhập'}
             </button>
           </form>
+          {!useBackend && (
+            <div className="admin-backend-url">
+              <p className="admin-backend-url-title">🖥️ Frontend GitHub Pages + Backend chạy trên máy bạn?</p>
+              <p className="admin-backend-url-desc">Nhập URL backend (vd. từ ngrok: <code>https://abc123.ngrok.io</code>). Sau khi lưu, trang sẽ tải lại và kết nối tới backend của bạn.</p>
+              <form onSubmit={handleSaveBackendUrl}>
+                <input
+                  type="url"
+                  placeholder="https://xxx.ngrok.io hoặc http://IP:5000"
+                  value={backendUrlInput}
+                  onChange={(e) => { setBackendUrlInput(e.target.value); setError(''); }}
+                  className="admin-backend-url-input"
+                />
+                <button type="submit" className="btn">Lưu URL backend</button>
+              </form>
+              {backendUrlSaved && <p className="admin-backend-url-ok">Đã lưu. Đang tải lại...</p>}
+            </div>
+          )}
         </div>
       </div>
     );

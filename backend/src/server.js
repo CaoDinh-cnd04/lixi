@@ -14,17 +14,24 @@ connectDB();
 
 const app = express();
 app.use(express.json({ limit: '10kb' }));
-// Cho phép cả localhost và IP LAN (điện thoại quét QR cùng WiFi)
+// CORS: localhost, IP LAN (điện thoại cùng WiFi), và FRONTEND_URL (vd. GitHub Pages)
+const frontendUrl = (process.env.FRONTEND_URL || '').trim();
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  ...(frontendUrl ? [frontendUrl] : []),
   'http://localhost:5173',
-  /^http:\/\/192\.168\.\d+\.\d+:5173$/,
-  /^http:\/\/10\.\d+\.\d+\.\d+:5173$/,
+  'https://localhost:5173',
+  /^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/,
+  /^http:\/\/10\.\d+\.\d+\.\d+(:\d+)?$/,
+  /^https:\/\/[a-z0-9-]+\.github\.io(\/.*)?$/,  // GitHub Pages
 ];
 app.use(cors({
   origin: (origin, cb) => {
     if (!origin) return cb(null, true);
-    if (allowedOrigins.some(o => (typeof o === 'string' ? o === origin : o.test(origin)))) return cb(null, true);
+    const ok = allowedOrigins.some(o => {
+      if (typeof o === 'string') return o === origin || origin === o.replace(/\/$/, '');
+      return o.test(origin.replace(/\/$/, ''));
+    });
+    if (ok) return cb(null, true);
     if (process.env.NODE_ENV !== 'production') return cb(null, true);
     return cb(null, false);
   },
