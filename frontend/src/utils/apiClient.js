@@ -1,12 +1,15 @@
 /**
  * Gọi API backend khi có VITE_API_URL. Dùng cho mọi request lên server.
- * Khi mở từ mạng (vd: 192.168.1.11:5173), tự dùng cùng host + cổng 5000 để API tới đúng máy chạy backend.
+ * Chỉ dùng host:5000 khi đang ở mạng nội bộ (192.168.x, 10.x) để điện thoại quét QR gọi đúng máy.
+ * Trên GitHub Pages / domain công khai: chỉ dùng VITE_API_URL (build time); không set thì không gọi backend.
  */
 function getApiBase() {
-  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    return `${window.location.protocol}//${window.location.hostname}:5000/api`;
-  }
   const url = import.meta.env.VITE_API_URL;
+  if (typeof window === 'undefined') return url ? `${url.replace(/\/$/, '')}/api` : '';
+  const host = window.location.hostname;
+  const isLocalhost = host === 'localhost' || host === '127.0.0.1';
+  const isLan = /^192\.168\.\d+\.\d+$|^10\.\d+\.\d+\.\d+$|^172\.(1[6-9]|2\d|3[01])\.\d+\.\d+$/.test(host);
+  if (isLan && !url) return `${window.location.protocol}//${host}:5000/api`;
   return url ? `${url.replace(/\/$/, '')}/api` : '';
 }
 const BASE = getApiBase();
