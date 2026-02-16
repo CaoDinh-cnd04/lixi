@@ -1,5 +1,5 @@
 .nhan-lixi {
-  padding: 0.5rem 0;
+  padding: 0.5rem 0 3rem;
   width: 100%;
   min-height: 60vh;
   display: flex;
@@ -183,7 +183,7 @@
   padding: 2rem 1.5rem;
   text-align: center;
   box-shadow: 0 4px 20px var(--shadow);
-  overflow: hidden;
+  overflow: visible;
   width: 100%;
   box-sizing: border-box;
   animation: result-block-breathe 3s ease-in-out infinite;

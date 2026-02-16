@@ -91,8 +91,12 @@ Vào **http://localhost:5173/admin** → nhập **mã admin** trùng với `ADMI
 1. Đẩy code lên GitHub (repo **project site**, ví dụ tên repo: `web-lixi`).
 2. Trong repo: **Settings → Pages** → **Source** chọn **GitHub Actions**.
 3. Mỗi lần push lên nhánh `main` (hoặc `master`), workflow **Deploy to GitHub Pages** sẽ build frontend và deploy.
-4. Trang sẽ có dạng: `https://<username>.github.io/<tên-repo>/` (vd: `https://username.github.io/web-lixi/`).
-5. Chế độ này chỉ deploy **frontend** (localStorage), không có backend. Để dùng backend từ mọi thiết bị, deploy backend riêng (Railway, Render...) rồi build frontend với `VITE_API_URL=https://your-backend.com` và deploy frontend lên Vercel/Netlify hoặc tạo workflow build với env `VITE_API_URL` rồi deploy.
+4. Trang sẽ có dạng: `https://<username>.github.io/<tên-repo>/` (vd: `https://username.github.io/lixi/` → trang nhận: `.../lixi/nhan-lixi`).
+5. **URL ngắn (chỉ `/nhan-lixi`):** Nếu tạo repo tên đúng **`<username>.github.io`** (User/Org Pages, vd: `caodinh-cnd04.github.io`) và đẩy cùng code lên đó, workflow sẽ tự build với base `/` → trang nhận sẽ là `https://<username>.github.io/nhan-lixi` (không có `/lixi/` ở giữa).
+6. Chế độ này chỉ deploy **frontend** (localStorage), không có backend. Để dùng backend từ mọi thiết bị, deploy backend riêng (Railway, Render...) rồi build frontend với `VITE_API_URL=https://your-backend.com` và deploy frontend lên Vercel/Netlify hoặc tạo workflow build với env `VITE_API_URL` rồi deploy.
+
+**⚠️ Tại sao Admin không thấy danh sách người quét QR?**  
+Khi bạn chỉ deploy frontend lên GitHub Pages (không có backend), trang chạy ở chế độ **chỉ localStorage**: mỗi người quét QR và nhận lì xì thì dữ liệu được lưu trong **trình duyệt của chính họ** (điện thoại/máy họ). Admin mở trang trên máy của mình thì chỉ đọc được **localStorage trên máy Admin** → không có dữ liệu từ điện thoại người khác, nên danh sách trống. Để **Admin thấy tất cả người đã quét QR**, bắt buộc phải **deploy backend** và **build frontend có kết nối backend** (xem mục dưới).
 
 ### Deploy Frontend + Backend (danh sách từ mọi thiết bị)
 

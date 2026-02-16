@@ -73,6 +73,13 @@
   right: 8px;
 }
 
+/* Trên màn hình nhỏ, ẩn câu đối để không đè lên nội dung giữa */
+@media (max-width: 768px) {
+  .tet-couplet {
+    display: none;
+  }
+}
+
 [data-theme='dark'] .tet-couplet__inner {
   background: linear-gradient(180deg, #b71c34 0%, #8b1530 100%);
   border-color: #6b1025;

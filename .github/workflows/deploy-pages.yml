@@ -35,12 +35,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Project site: https://username.github.io/REPO_NAME/ → base = /REPO_NAME/
-      # User site: https://username.github.io/ → base = /
+      # Project site: .../REPO_NAME/ ; User site (repo username.github.io): .../ → URL ngắn .../nhan-lixi
+      - name: Set base path
+        id: base
+        run: |
+          if [ "${{ github.event.repository.name }}" = "caodinh-cnd04.github.io" ]; then
+            echo "path=/" >> $GITHUB_OUTPUT
+          else
+            echo "path=/${{ github.event.repository.name }}/" >> $GITHUB_OUTPUT
+          fi
+      # Nếu cần Admin thấy danh sách người quét QR: deploy backend (Railway/Render/...), thêm repo secret VITE_API_URL = URL backend (vd. https://xxx.railway.app), rồi bật dòng dưới.
       - name: Build
         run: npm run build
         env:
-          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_BASE_PATH: ${{ steps.base.outputs.path }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       # GitHub Pages: mọi đường dẫn (vd. /lixi/admin) không có file → trả 404.html. Copy index → 404 để SPA luôn load, React Router xử lý route.
       - name: Copy index to 404 for SPA routing
