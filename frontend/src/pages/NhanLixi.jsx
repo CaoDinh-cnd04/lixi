@@ -187,7 +187,7 @@ export default function NhanLixi() {
       setError('');
       const data = await getPublicConfig();
       setConfig(data);
-      if (data.isLocked) setError('Sự kiện đã kết thúc.');
+      // Chỉ báo "kết thúc" khi thời gian sự kiện đã qua (eventEndTime), không set error khi chỉ isLocked (đủ số người).
     } catch (e) {
       setError(e.message || 'Không tải được cấu hình.');
     } finally {
@@ -318,7 +318,7 @@ export default function NhanLixi() {
           <div className="message-box error">Sự kiện đã kết thúc.</div>
         )}
 
-        {error && (
+        {error && !eventEnded && (
           <div className={`message-box ${alreadyReceived ? 'info' : 'error'}`}>
             {error}
           </div>
@@ -444,8 +444,12 @@ export default function NhanLixi() {
                 )}
               </button>
             </motion.form>
+          ) : eventEnded ? (
+            <div className="message-box error">Sự kiện đã kết thúc.</div>
+          ) : eventNotStarted ? (
+            <div className="message-box info">Sự kiện chưa bắt đầu. Vui lòng quay lại sau.</div>
           ) : (
-            <div className="message-box info">Sự kiện tạm thời đã đủ số lượng hoặc đã kết thúc.</div>
+            <div className="message-box info">Sự kiện tạm thời đã đủ số lượng người nhận.</div>
           )}
         </AnimatePresence>
       </motion.div>
