@@ -95,6 +95,9 @@ Vào **http://localhost:5173/admin** → nhập **mã admin** trùng với `ADMI
 5. **URL ngắn (chỉ `/nhan-lixi`):** Nếu tạo repo tên đúng **`<username>.github.io`** (User/Org Pages, vd: `caodinh-cnd04.github.io`) và đẩy cùng code lên đó, workflow sẽ tự build với base `/` → trang nhận sẽ là `https://<username>.github.io/nhan-lixi` (không có `/lixi/` ở giữa).
 6. Chế độ này chỉ deploy **frontend** (localStorage), không có backend. Để dùng backend từ mọi thiết bị, deploy backend riêng (Railway, Render...) rồi build frontend với `VITE_API_URL=https://your-backend.com` và deploy frontend lên Vercel/Netlify hoặc tạo workflow build với env `VITE_API_URL` rồi deploy.
 
+**⚠️ Quét QR bị 404?**  
+Mã QR dùng địa chỉ trang bạn đang mở. Nếu bạn mở Admin từ URL sai (vd. thiếu `/lixi` hoặc domain khác), link trong QR sẽ sai. Cách xử lý: (1) Mở đúng trang **https://&lt;username&gt;.github.io/lixi/** (thay username của bạn), vào Admin → Mã QR, tải lại trang rồi dùng mã QR mới. (2) Hoặc trong repo GitHub: **Settings → Secrets** → tạo secret **VITE_PUBLIC_ORIGIN** = `https://caodinh-cnd04.github.io` (không dấu / cuối), push code để build lại; khi đó QR luôn trỏ đúng dù mở từ đâu.
+
 **⚠️ Tại sao Admin không thấy danh sách người quét QR?**  
 Khi bạn chỉ deploy frontend lên GitHub Pages (không có backend), trang chạy ở chế độ **chỉ localStorage**: mỗi người quét QR và nhận lì xì thì dữ liệu được lưu trong **trình duyệt của chính họ** (điện thoại/máy họ). Admin mở trang trên máy của mình thì chỉ đọc được **localStorage trên máy Admin** → không có dữ liệu từ điện thoại người khác, nên danh sách trống. Để **Admin thấy tất cả người đã quét QR**, bắt buộc phải **deploy backend** và **build frontend có kết nối backend** (xem mục dưới).
 

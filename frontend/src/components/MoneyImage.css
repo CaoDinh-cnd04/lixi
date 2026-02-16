@@ -4,7 +4,7 @@
 }
 
 .money-image__img {
-  max-width: 100%;
+  max-width: min(160px, 85vw);
   width: 160px;
   height: auto;
   border-radius: 12px;
@@ -52,7 +52,7 @@
 }
 
 .money-image__bill {
-  width: 160px;
+  width: min(160px, 85vw);
   min-height: 72px;
   aspect-ratio: 2.2 / 1;
   background: linear-gradient(145deg, #e8d5b5 0%, #d4c4a0 50%, #c9b896 100%);
@@ -68,7 +68,7 @@
 }
 
 .money-image__bill-value {
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
   font-weight: 800;
   color: #5c4a2a;
   letter-spacing: 0.02em;

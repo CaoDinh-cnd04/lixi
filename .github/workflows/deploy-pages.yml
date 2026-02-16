@@ -44,11 +44,13 @@ jobs:
           else
             echo "path=/${{ github.event.repository.name }}/" >> $GITHUB_OUTPUT
           fi
-      # Nếu cần Admin thấy danh sách người quét QR: deploy backend (Railway/Render/...), thêm repo secret VITE_API_URL = URL backend (vd. https://xxx.railway.app), rồi bật dòng dưới.
+      # VITE_PUBLIC_ORIGIN: URL gốc cố định cho mã QR (vd. https://caodinh-cnd04.github.io). Set repo secret để QR luôn trỏ đúng, tránh 404 khi quét.
+      # VITE_API_URL: URL backend nếu dùng (để Admin thấy danh sách người quét QR).
       - name: Build
         run: npm run build
         env:
           VITE_BASE_PATH: ${{ steps.base.outputs.path }}
+          VITE_PUBLIC_ORIGIN: ${{ secrets.VITE_PUBLIC_ORIGIN }}
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       # GitHub Pages: mọi đường dẫn (vd. /lixi/admin) không có file → trả 404.html. Copy index → 404 để SPA luôn load, React Router xử lý route.

@@ -107,6 +107,13 @@ function getBasePath() {
   return b.endsWith('/') ? b.slice(0, -1) : b;
 }
 
+/** URL gốc cố định cho QR (build time). Set VITE_PUBLIC_ORIGIN để QR luôn trỏ đúng dù mở Admin từ đâu */
+function getPublicOrigin() {
+  const raw = typeof import.meta !== 'undefined' && import.meta.env?.VITE_PUBLIC_ORIGIN;
+  const s = typeof raw === 'string' ? raw.trim() : '';
+  return s ? s.replace(/\/$/, '') : '';
+}
+
 export async function getQr() {
   const { getBaseUrlForQr } = await import('./qrBaseUrl.js');
   const base = await getBaseUrlForQr();
@@ -116,7 +123,8 @@ export async function getQr() {
     const r = await request(url);
     return r.data;
   }
-  const origin = baseClean || (typeof window !== 'undefined' ? window.location.origin : '');
+  const publicOrigin = getPublicOrigin();
+  const origin = publicOrigin || baseClean || (typeof window !== 'undefined' ? window.location.origin : '');
   const basePath = getBasePath();
   const receiveUrl = `${origin}${basePath}/nhan-lixi`;
   const QRCode = (await import('qrcode')).default;

@@ -42,10 +42,13 @@ export default function QRAdminPage() {
       <div className="qr-wrap" style={{ margin: '0 auto 1rem' }}>
         <img src={data.qrDataUrl} alt="QR Code" className="qr-image" />
       </div>
-      <p className="qr-url-label">Link nhận lì xì:</p>
+      <p className="qr-url-label">Link nhận lì xì (quét QR sẽ mở link này):</p>
       <a href={data.receiveUrl} className="qr-link" target="_blank" rel="noopener noreferrer">
         {data.receiveUrl}
       </a>
+      <p className="qr-hint" style={{ marginTop: '0.75rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+        Nếu quét QR bị 404: đảm bảo bạn đang mở trang Admin từ đúng địa chỉ web (vd. <strong>https://caodinh-cnd04.github.io/lixi/</strong>), sau đó tải lại trang này và dùng mã QR mới.
+      </p>
     </motion.div>
   );
 }
