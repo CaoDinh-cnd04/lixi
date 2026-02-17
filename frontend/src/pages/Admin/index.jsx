@@ -99,15 +99,18 @@ export default function Admin() {
   const handleSaveBackendUrl = (e) => {
     e.preventDefault();
     const url = backendUrlInput.trim().replace(/\/+$/, '');
+    setError('');
+    // Cho phép xóa backend runtime để quay về VITE_API_URL (build-time) hoặc chế độ localStorage
     if (!url) {
-      setError('Nhập URL backend (vd. https://xxx.ngrok.io)');
+      setBackendUrl('');
+      setBackendUrlSaved(true);
+      setTimeout(() => window.location.reload(), 400);
       return;
     }
     if (!/^https?:\/\/.+/i.test(url)) {
       setError('URL phải bắt đầu bằng http:// hoặc https://');
       return;
     }
-    setError('');
     setBackendUrl(url);
     setBackendUrlSaved(true);
     setTimeout(() => window.location.reload(), 400);
@@ -175,23 +178,26 @@ export default function Admin() {
               {loading ? 'Đang kiểm tra...' : isCreate ? 'Tạo mã và vào quản lý' : 'Đăng nhập'}
             </button>
           </form>
-          {!useBackend && (
-            <div className="admin-backend-url">
-              <p className="admin-backend-url-title">🖥️ Frontend GitHub Pages + Backend chạy trên máy bạn?</p>
-              <p className="admin-backend-url-desc">Nhập URL backend (vd. từ ngrok: <code>https://abc123.ngrok.io</code>). Sau khi lưu, trang sẽ tải lại và kết nối tới backend của bạn.</p>
-              <form onSubmit={handleSaveBackendUrl}>
-                <input
-                  type="url"
-                  placeholder="https://xxx.ngrok.io hoặc http://IP:5000"
-                  value={backendUrlInput}
-                  onChange={(e) => { setBackendUrlInput(e.target.value); setError(''); }}
-                  className="admin-backend-url-input"
-                />
-                <button type="submit" className="btn">Lưu URL backend</button>
-              </form>
-              {backendUrlSaved && <p className="admin-backend-url-ok">Đã lưu. Đang tải lại...</p>}
-            </div>
-          )}
+          <div className="admin-backend-url">
+            <p className="admin-backend-url-title">🔌 Backend URL (tuỳ chọn)</p>
+            <p className="admin-backend-url-desc">
+              Dán URL backend để mọi thiết bị quét QR dùng chung danh sách (vd. cloudflared: <code>https://xxx.trycloudflare.com</code>).
+              {useBackend
+                ? ' Hiện app đang có backend (từ VITE_API_URL hoặc URL runtime đã lưu). Bạn có thể dán URL khác để override.'
+                : ' Nếu để trống, app sẽ chạy chế độ localStorage (mỗi thiết bị 1 danh sách).'}
+            </p>
+            <form onSubmit={handleSaveBackendUrl}>
+              <input
+                type="url"
+                placeholder="https://xxx.trycloudflare.com hoặc https://api.yourdomain.com"
+                value={backendUrlInput}
+                onChange={(e) => { setBackendUrlInput(e.target.value); setError(''); }}
+                className="admin-backend-url-input"
+              />
+              <button type="submit" className="btn">{backendUrlInput.trim() ? 'Lưu URL backend' : 'Xóa URL backend (dùng mặc định)'}</button>
+            </form>
+            {backendUrlSaved && <p className="admin-backend-url-ok">Đã lưu. Đang tải lại...</p>}
+          </div>
         </div>
       </div>
     );
@@ -199,6 +205,23 @@ export default function Admin() {
 
   return (
     <div className="admin-wrap">
+      <div className="admin-backend-url" style={{ margin: '0 0 1rem' }}>
+        <p className="admin-backend-url-title">🔌 Backend URL (đang dùng)</p>
+        <p className="admin-backend-url-desc">
+          Bạn có thể dán URL backend khác (cloudflared) để QR và dữ liệu đồng bộ mọi thiết bị. Nếu để trống sẽ quay về mặc định (VITE_API_URL hoặc localStorage).
+        </p>
+        <form onSubmit={handleSaveBackendUrl}>
+          <input
+            type="url"
+            placeholder="https://xxx.trycloudflare.com hoặc https://api.yourdomain.com"
+            value={backendUrlInput}
+            onChange={(e) => { setBackendUrlInput(e.target.value); setError(''); }}
+            className="admin-backend-url-input"
+          />
+          <button type="submit" className="btn">{backendUrlInput.trim() ? 'Lưu URL backend' : 'Xóa URL backend (dùng mặc định)'}</button>
+        </form>
+        {backendUrlSaved && <p className="admin-backend-url-ok">Đã lưu. Đang tải lại...</p>}
+      </div>
       <nav className="admin-nav">
         <Link to="/admin/dashboard">Dashboard</Link>
         <Link to="/admin/config">Cấu hình</Link>

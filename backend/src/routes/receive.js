@@ -14,7 +14,7 @@ const SPECIAL_GIFT_LABEL = '__special_gift__';
 function pickRandom(denominations, recipients, specialGift) {
   const countByLabel = {};
   recipients.forEach((r) => {
-    const l = r.denominationLabel || String(r.amount);
+    const l = r.isSpecialGift ? SPECIAL_GIFT_LABEL : (r.denominationLabel || String(r.amount));
     countByLabel[l] = (countByLabel[l] || 0) + 1;
   });
   let pool = denominations.filter((d) => {
@@ -103,15 +103,35 @@ router.post('/', receiveLimiter, async (req, res) => {
       return res.status(409).json({ success: false, message: 'Mỗi mạng/thiết bị chỉ được nhận lì xì 1 lần' });
     }
 
-    const recipients = await Recipient.find().lean();
     const specialGift = config.specialGift || {};
-    const picked = pickRandom(config.denominations, recipients, specialGift);
+    let recipients = await Recipient.find().lean();
+    let picked = pickRandom(config.denominations, recipients, specialGift);
     if (!picked) {
       return res.status(503).json({ success: false, message: 'Đã hết lượt lì xì hoặc chưa cấu hình mệnh giá' });
     }
 
-    const isSpecialGift = !!picked.isSpecialGift;
-    const displayLabel = isSpecialGift ? (specialGift.label || 'Quà đặc biệt') : picked.label;
+    let isSpecialGift = !!picked.isSpecialGift;
+    let displayLabel = isSpecialGift ? (specialGift.label || 'Quà đặc biệt') : picked.label;
+
+    // Kiểm tra lại số lượng tờ ngay trước khi tạo (tránh race: 2 request cùng lúc chọn 1 mệnh giá)
+    const quantityForPicked = Math.max(1, parseInt(picked.quantity, 10) || 1);
+    let countForLabel = await Recipient.countDocuments({ denominationLabel: displayLabel });
+    if (countForLabel >= quantityForPicked) {
+      recipients = await Recipient.find().lean();
+      const picked2 = pickRandom(config.denominations, recipients, specialGift);
+      if (!picked2) {
+        return res.status(503).json({ success: false, message: 'Đã hết lượt lì xì hoặc chưa cấu hình mệnh giá' });
+      }
+      const displayLabel2 = picked2.isSpecialGift ? (specialGift.label || 'Quà đặc biệt') : picked2.label;
+      const q2 = Math.max(1, parseInt(picked2.quantity, 10) || 1);
+      const count2 = await Recipient.countDocuments({ denominationLabel: displayLabel2 });
+      if (count2 >= q2) {
+        return res.status(503).json({ success: false, message: 'Đã hết lượt lì xì. Vui lòng thử lại.' });
+      }
+      picked = picked2;
+      displayLabel = displayLabel2;
+      isSpecialGift = !!picked.isSpecialGift;
+    }
 
     await Recipient.create({
       name: nameTrim,

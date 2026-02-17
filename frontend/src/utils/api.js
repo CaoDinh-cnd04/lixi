@@ -119,11 +119,6 @@ export async function getQr() {
   const { getBaseUrlForQr } = await import('./qrBaseUrl.js');
   const base = await getBaseUrlForQr();
   const baseClean = base ? base.replace(/\/$/, '') : '';
-  if (hasBackend()) {
-    const url = baseClean ? `/qr?baseUrl=${encodeURIComponent(baseClean)}` : '/qr';
-    const r = await request(url);
-    return r.data;
-  }
   const publicOrigin = getPublicOrigin();
   const origin = publicOrigin || baseClean || (typeof window !== 'undefined' ? window.location.origin : '');
   const basePath = getBasePath();

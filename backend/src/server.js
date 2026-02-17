@@ -13,6 +13,9 @@ const qrRoutes = require('./routes/qr');
 connectDB();
 
 const app = express();
+// Khi chạy sau proxy (Cloudflare Tunnel/ngrok/reverse proxy), request có X-Forwarded-For.
+// express-rate-limit yêu cầu bật trust proxy để nhận diện IP đúng và không throw lỗi.
+app.set('trust proxy', 1);
 app.use(express.json({ limit: '10kb' }));
 // CORS: localhost, IP LAN (điện thoại cùng WiFi), và FRONTEND_URL (vd. GitHub Pages)
 const frontendUrl = (process.env.FRONTEND_URL || '').trim();

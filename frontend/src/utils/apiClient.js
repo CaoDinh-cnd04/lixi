@@ -1,9 +1,18 @@
 const STORAGE_BACKEND_URL = 'lixi_backend_url';
 
-/** Đọc URL backend cấu hình tại runtime (vd. Frontend GitHub Pages + Backend máy tính qua ngrok) */
+/** Đọc URL backend: ưu tiên tham số ?api= trên URL (để máy quét QR dùng đúng backend), rồi mới đến localStorage. */
 function getStoredBackendUrl() {
   if (typeof window === 'undefined') return '';
   try {
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = params.get('api');
+    if (fromUrl && typeof fromUrl === 'string' && /^https?:\/\//i.test(fromUrl.trim())) {
+      const u = fromUrl.trim().replace(/\/api\/?$/, '').replace(/\/$/, '');
+      if (u) {
+        localStorage.setItem(STORAGE_BACKEND_URL, u);
+        return u;
+      }
+    }
     const u = localStorage.getItem(STORAGE_BACKEND_URL);
     return typeof u === 'string' ? u.trim() : '';
   } catch {
