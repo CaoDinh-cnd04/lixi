@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getPublicConfig, submitReceive, checkReceived } from '../utils/api';
+import { getPublicConfig, submitReceive, checkReceived, hasBackend } from '../utils/api';
 import { getClientIp } from '../utils/clientIp';
 import Envelope from '../components/Envelope';
 import MoneyImage from '../components/MoneyImage';
@@ -25,6 +25,12 @@ function getStoredResult() {
 function setStoredResult(data) {
   try {
     localStorage.setItem(LIXI_STORAGE_KEY, JSON.stringify(data));
+  } catch {}
+}
+
+function clearStoredResult() {
+  try {
+    localStorage.removeItem(LIXI_STORAGE_KEY);
   } catch {}
 }
 
@@ -199,16 +205,50 @@ export default function NhanLixi() {
     loadConfig();
   }, [loadConfig]);
 
+  // Khi có dữ liệu "đã nhận" trong localStorage: nếu dùng backend thì hỏi lại server.
+  // Nếu Admin đã xóa người này thì backend trả received: false → xóa localStorage và cho nhận lại.
   useEffect(() => {
-    if (stored) {
-      setResult({
-        amount: stored.amount,
-        label: stored.label,
-        isSpecialGift: !!stored.isSpecialGift,
-        specialGiftDescription: stored.specialGiftDescription
-      });
-      setAlreadyReceived(true);
+    if (!stored) return;
+    if (hasBackend() && stored.phone) {
+      checkReceived(stored.phone)
+        .then((check) => {
+          if (check && !check.received) {
+            clearStoredResult();
+            setAlreadyReceived(false);
+            setResult(null);
+            return;
+          }
+          setResult({
+            amount: stored.amount,
+            label: stored.label,
+            isSpecialGift: !!stored.isSpecialGift,
+            specialGiftDescription: stored.specialGiftDescription
+          });
+          setAlreadyReceived(true);
+        })
+        .catch(() => {
+          setResult({
+            amount: stored.amount,
+            label: stored.label,
+            isSpecialGift: !!stored.isSpecialGift,
+            specialGiftDescription: stored.specialGiftDescription
+          });
+          setAlreadyReceived(true);
+        });
+      return;
     }
+    if (hasBackend() && !stored.phone) {
+      setAlreadyReceived(false);
+      setResult(null);
+      return;
+    }
+    setResult({
+      amount: stored.amount,
+      label: stored.label,
+      isSpecialGift: !!stored.isSpecialGift,
+      specialGiftDescription: stored.specialGiftDescription
+    });
+    setAlreadyReceived(true);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -239,7 +279,7 @@ export default function NhanLixi() {
         ip = null;
       }
       const data = await submitReceive(name, age, phone, ip);
-      setStoredResult(data);
+      setStoredResult({ ...data, phone });
       setResult({
         amount: data.amount,
         label: data.label,
