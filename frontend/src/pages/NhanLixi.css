@@ -283,7 +283,11 @@
 
 
 .result-envelope-wrap {
+  /* Envelope flap vươn lên trên (top:-35px). Thêm khoảng đệm để không "chọc" lên block phía trên trên mobile. */
+  padding-top: 38px;
   margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: center;
 }
 
 .result-money-wrap {

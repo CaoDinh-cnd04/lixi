@@ -30,6 +30,17 @@
   transform-origin: top center;
 }
 
+/* Mobile: thu bớt flap để bố cục gọn, tránh cảm giác lệch/đè */
+@media (max-width: 420px) {
+  .envelope__body { width: 128px; height: 92px; }
+  .envelope__flap {
+    top: -30px;
+    border-left-width: 64px;
+    border-right-width: 64px;
+    border-top-width: 40px;
+  }
+}
+
 [data-theme='dark'] .envelope__flap {
   border-top-color: #e85c6e;
 }
